@@ -122,16 +122,21 @@
     </div>
 
     <script>
-      let currentAudio = null;
+      // @ts-check
+      const maxStreams = 2;
+      let currentStream = 0;
+      let audioStreams = new Array(maxStreams).fill(null);
 
       function playSound(filename) {
-        if (currentAudio) {
-          currentAudio.pause();
-          currentAudio.currentTime = 0;
+        currentStream = (currentStream + 1) % maxStreams;
+
+        if (audioStreams[currentStream]) {
+          audioStreams[currentStream].pause();
+          audioStreams[currentStream].currentTime = 0;
         }
 
-        currentAudio = new Audio("audio/" + filename);
-        currentAudio.play().catch((error) => {
+        audioStreams[currentStream] = new Audio("audio/" + filename);
+        audioStreams[currentStream].play().catch((error) => {
           console.error("Error playing audio:", error);
         });
       }
