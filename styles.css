@@ -33,12 +33,15 @@ h1 {
 .grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
+  grid-auto-rows: 1fr;
   gap: 15px;
   max-width: 600px;
 }
 
 button {
-  padding: 30px 20px;
+  width: 10rem;
+  padding: 20px;
+  aspect-ratio: 1;
   font-size: 16px;
   font-weight: 600;
   color: white;
@@ -78,5 +81,10 @@ audio {
     display: flex;
     flex-direction: column;
     justify-content: center;
+  }
+
+  button {
+    width: 25vw;
+    font-size: 12px;
   }
 }

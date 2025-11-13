@@ -23,3 +23,18 @@ function playSound(filename) {
   });
   audioStreams[currentIndex] = audio;
 }
+
+const buttons = document.querySelectorAll("button");
+document.addEventListener("keydown", (event) => {
+  const numberKey = parseInt(event.key);
+  if (isNaN(numberKey)) {
+    return;
+  }
+
+  if (numberKey < 1 || numberKey > 9) {
+    return;
+  }
+
+  const button = buttons[numberKey - 1];
+  button.click();
+});
