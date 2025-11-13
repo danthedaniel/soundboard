@@ -1,18 +1,14 @@
 // @ts-check
 "use strict";
 
-const maxStreams = 2;
-let currentIndex = 0;
-/** @type {(HTMLAudioElement | null)[]} */
-let audioStreams = new Array(maxStreams).fill(null);
+/** @type {Record<string, HTMLAudioElement>} */
+const audioStreams = {};
 
 /**
  * @param {string} filename
  */
 function playSound(filename) {
-  currentIndex = (currentIndex + 1) % maxStreams;
-  const currentAudio = audioStreams[currentIndex];
-
+  const currentAudio = audioStreams[filename];
   if (currentAudio) {
     currentAudio.pause();
     currentAudio.currentTime = 0;
@@ -22,7 +18,10 @@ function playSound(filename) {
   audio.play().catch((error) => {
     console.error("Error playing audio:", error);
   });
-  audioStreams[currentIndex] = audio;
+  audio.onended = () => {
+    delete audioStreams[filename];
+  };
+  audioStreams[filename] = audio;
 }
 
 const buttons = document.querySelectorAll("button");
