@@ -1,5 +1,6 @@
-"use strict";
 // @ts-check
+"use strict";
+
 const maxStreams = 2;
 let currentIndex = 0;
 /** @type {(HTMLAudioElement | null)[]} */
@@ -25,6 +26,18 @@ function playSound(filename) {
 }
 
 const buttons = document.querySelectorAll("button");
+
+for (const button of buttons) {
+  button.addEventListener("click", () => {
+    const filename = button.dataset["filename"];
+    if (!filename) {
+      return;
+    }
+
+    playSound(filename);
+  });
+}
+
 document.addEventListener("keydown", (event) => {
   const numberKey = parseInt(event.key);
   if (isNaN(numberKey)) {
@@ -36,5 +49,10 @@ document.addEventListener("keydown", (event) => {
   }
 
   const button = buttons[numberKey - 1];
-  button.click();
+  const filename = button.dataset["filename"];
+  if (!filename) {
+    return;
+  }
+
+  playSound(filename);
 });
