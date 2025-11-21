@@ -2,26 +2,41 @@
 "use strict";
 
 /** @type {Record<string, HTMLAudioElement>} */
-const audioStreams = {};
+const audioElements = {};
+
+/**
+ * Preload all audio files
+ */
+function preloadAudio() {
+  const buttons = /** @type {NodeListOf<HTMLButtonElement>} */ (
+    document.querySelectorAll("button[data-filename]")
+  );
+
+  for (const button of buttons) {
+    const filename = button.dataset["filename"];
+    if (!filename) {
+      continue;
+    }
+
+    // Create and preload audio element
+    const audio = new Audio("audio/" + filename);
+    audio.preload = "auto";
+    audio.load(); // Force Safari to load the audio
+
+    audioElements[filename] = audio;
+  }
+}
+preloadAudio();
 
 /**
  * @param {string} filename
  */
 function playSound(filename) {
-  const currentAudio = audioStreams[filename];
-  if (currentAudio) {
-    currentAudio.pause();
-    currentAudio.currentTime = 0;
-  }
-
-  const audio = new Audio("audio/" + filename);
-  audio.play().catch((error) => {
+  audioElements[filename].pause();
+  audioElements[filename].currentTime = 0;
+  audioElements[filename].play().catch((error) => {
     console.error("Error playing audio:", error);
   });
-  audio.onended = () => {
-    delete audioStreams[filename];
-  };
-  audioStreams[filename] = audio;
 }
 
 const buttons = document.querySelectorAll("button");
