@@ -32,9 +32,10 @@ preloadAudio();
  * @param {string} filename
  */
 function playSound(filename) {
-  audioElements[filename].pause();
-  audioElements[filename].currentTime = 0;
-  audioElements[filename].play().catch((error) => {
+  const audio = audioElements[filename];
+  audio.pause();
+  audio.currentTime = 0;
+  audio.play().catch((error) => {
     console.error("Error playing audio:", error);
   });
 }
